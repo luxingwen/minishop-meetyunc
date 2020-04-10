@@ -76,6 +76,6 @@
       </view>
    </view>
    <!-- <image src='/images/hhysh-logo-full.png' class='support'></image> -->
-   <image src='https://hhshop.biggerforum.org/public/uploads/common/hhysh-logo-full.png' class='support'></image>
+   <image src='http://src.hhshw.net/zr-logo-horizontal-small.png' class='support'></image>
 </view>
 <authorize bind:onLoadFun='onLoadFun'></authorize>

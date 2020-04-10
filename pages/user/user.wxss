@@ -28,6 +28,6 @@
 .user .wrapper .myService .serviceList .item{width:25%;text-align:center;font-size:26rpx;color:#333;margin-top:30rpx;}
 .user .wrapper .myService .serviceList .item .pictrue{width:52rpx;height:52rpx;margin:0 auto 16rpx auto;}
 .user .wrapper .myService .serviceList .item .pictrue image{width:100%;height:100%;}
-.user .support{width:219rpx;height:74rpx;margin:54rpx auto;display:block;}
+.user .support{width:202rpx;height:50rpx;margin:54rpx auto;display:block;}
 
 
