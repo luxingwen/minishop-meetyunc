@@ -1,3 +1,4 @@
+import request from '../../utils/api'
 const app = getApp();
 Page({
 
@@ -57,9 +58,18 @@ Page({
   */
   getUserInfo:function(){
     var that=this;
-    app.baseGet(app.U({c:'user_api',a:'my'}),function(res){
-      that.setData({userInfo:res.data});
-    });
+    request.userInfo({
+      success: res => {
+        console.log("userinfo:",res);
+        that.setData({userInfo:res.data});
+      },
+      fail: err => {
+        console.log(err);
+      }
+    })
+    // app.baseGet(app.U({c:'user_api',a:'my'}),function(res){
+    //   that.setData({userInfo:res.data});
+    // });
   },
   /**
    * 页面跳转

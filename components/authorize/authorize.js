@@ -81,21 +81,21 @@ Component({
             var that = this;
             that.setData({ loading: true });
             request.setCode({
-              data: {
-                code: code,
-              },
-              success: res => {
-                console.log("setcode: ",res);
-                wx.setStorage({ key: 'cache_key', data: res.data.cache_key });
-                successFn && successFn(res);
-              },
-              fail: err =>{
-                console.log("err");
-                that.setData({ loading: false });
-                if (errotFn) errotFn(err);
-                else return app.Tips({ title: '获取cache_key失败' });
+                data: {
+                    code: code,
+                },
+                success: res => {
+                    console.log("setcode: ", res);
+                    wx.setStorage({ key: 'cache_key', data: res.data.cache_key });
+                    successFn && successFn(res);
+                },
+                fail: err => {
+                    console.log("err");
+                    that.setData({ loading: false });
+                    if (errotFn) errotFn(err);
+                    else return app.Tips({ title: '获取cache_key失败' });
 
-              }
+                }
             })
             // app.basePost(app.U({ c: 'Login', a: 'setCode' }), { code: code }, function(res) {
             //     that.setData({ loading: false });
@@ -186,50 +186,93 @@ Component({
                                     request.login({
                                         data: pdata,
                                         success: res => {
-                                           console.log("login:",res)
+                                            if (res.code == 0) {
+                                                if (res.data.status == 0) {
+                                                    return app.Tips({ title: '抱歉，您已被禁止登录!' });
+                                                } else if (res.data.status == 410) {
+                                                    wx.clearStorage();
+                                                    wx.hideLoading();
+                                                    that.setErrorCount();
+                                                    that.login();
+                                                    return false;
+                                                }
+                                                //取消登录提示
+                                                wx.hideLoading();
+                                                //关闭登录弹出窗口
+                                                that.setData({ iShidden: true, ErrorCount: 0 });
+                                                //保存token和记录登录状态
+                                                app.globalData.token = res.data.token;
+                                                wx.setStorageSync('access-token', res.data.token);
+                                                app.globalData.isLog = true;
+                                                //执行登录完成回调
+                                                that.triggerEvent('onLoadFun', app.globalData.uid);
+                                                //清除定时器
+                                                if (that.data.cloneIner) clearInterval(that.data.cloneIner);
+                                                //监听登录状态
+                                                that.WatchIsLogin();
+                                            } else {
+                                                that.setData({ loading: false });
+                                                wx.hideLoading();
+                                                that.setErrorCount();
+                                                wx.clearStorage();
+                                                return app.Tips({ title: res.message });
+                                            }
+
+                                            console.log("login:", res)
                                             // console.log(list)
                                         },
                                         fail: err => {
                                             console.log(err)
+                                            wx.hideLoading();
+                                            wx.clearStorage();
+                                            that.setErrorCount();
+                                            return app.Tips({ title: '用户信息获取失败!' });
                                         }
                                     })
-
-                                    app.basePost(app.U({ c: 'login', a: 'index' }), pdata, function(res) {
-                                        that.setData({ loading: false });
-                                        if (res.data.status == 0) return app.Tips({ title: '抱歉，您已被禁止登录!' });
-                                        else if (res.data.status == 410) {
-                                            wx.clearStorage();
-                                            wx.hideLoading();
-                                            that.setErrorCount();
-                                            that.login();
-                                            return false;
-                                        }
-                                        //取消登录提示
-                                        wx.hideLoading();
-                                        //关闭登录弹出窗口
-                                        that.setData({ iShidden: true, ErrorCount: 0 });
-                                        //保存token和记录登录状态
-                                        app.globalData.token = res.data.token;
-                                        app.globalData.isLog = true;
-                                        //执行登录完成回调
-                                        that.triggerEvent('onLoadFun', app.globalData.uid);
-                                        //清除定时器
-                                        if (that.data.cloneIner) clearInterval(that.data.cloneIner);
-                                        //监听登录状态
-                                        that.WatchIsLogin();
-                                    }, function(res) {
-                                        that.setData({ loading: false });
-                                        wx.hideLoading();
-                                        that.setErrorCount();
-                                        wx.clearStorage();
-                                        return app.Tips({ title: res.msg });
-                                    });
                                 } else {
                                     wx.hideLoading();
                                     wx.clearStorage();
                                     that.setErrorCount();
                                     return app.Tips({ title: '用户信息获取失败!' });
                                 }
+
+
+                                //     app.basePost(app.U({ c: 'login', a: 'index' }), pdata, function(res) {
+                                //         that.setData({ loading: false });
+                                //         if (res.data.status == 0) return app.Tips({ title: '抱歉，您已被禁止登录!' });
+                                //         else if (res.data.status == 410) {
+                                //             wx.clearStorage();
+                                //             wx.hideLoading();
+                                //             that.setErrorCount();
+                                //             that.login();
+                                //             return false;
+                                //         }
+                                //         //取消登录提示
+                                //         wx.hideLoading();
+                                //         //关闭登录弹出窗口
+                                //         that.setData({ iShidden: true, ErrorCount: 0 });
+                                //         //保存token和记录登录状态
+                                //         app.globalData.token = res.data.token;
+                                //         app.globalData.isLog = true;
+                                //         //执行登录完成回调
+                                //         that.triggerEvent('onLoadFun', app.globalData.uid);
+                                //         //清除定时器
+                                //         if (that.data.cloneIner) clearInterval(that.data.cloneIner);
+                                //         //监听登录状态
+                                //         that.WatchIsLogin();
+                                //     }, function(res) {
+                                //         that.setData({ loading: false });
+                                //         wx.hideLoading();
+                                //         that.setErrorCount();
+                                //         wx.clearStorage();
+                                //         return app.Tips({ title: res.msg });
+                                //     });
+                                // } else {
+                                //     wx.hideLoading();
+                                //     wx.clearStorage();
+                                //     that.setErrorCount();
+                                //     return app.Tips({ title: '用户信息获取失败!' });
+                                // }
                             },
                             fail: function() {
                                 wx.hideLoading();
