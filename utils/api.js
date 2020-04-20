@@ -59,6 +59,16 @@ function getIssueCouponList(params) {
 	request("/api/coupon/issue_coupon_list", "get", params)
 }
 
+// 获取授权登陆logo
+function getLogoUrl(params) {
+	request("/api/logo_url", "get", params)
+}
+
+// 获取购物车数量
+function getCartNum(params) {
+	request("/api/store/cart_num", "get", params)
+}
+
 export default { // 暴露接口
   login,
   setCode,
@@ -71,5 +81,7 @@ export default { // 暴露接口
   hotProducts,
   getMyNaviga,
   getProductCollect,
-  getIssueCouponList
+  getIssueCouponList,
+  getLogoUrl,
+  getCartNum
 }

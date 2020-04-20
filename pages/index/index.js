@@ -61,10 +61,23 @@ Page({
     },
     get_issue_coupon_list: function() {
         var that = this;
-        app.baseGet(app.U({ c: 'coupons_api', a: 'get_issue_coupon_list', q: { limit: 3 } }), function(res) {
-            that.setData({ couponList: res.data });
-            if (!res.data.length) that.setData({ window: false });
+        request.getIssueCouponList({
+            data: {
+                page: 1,
+                limit: 3
+            },
+            success: res => {
+                that.setData({ couponList: res.data });
+                if (!res.data.length) that.setData({ window: false });
+            },
+            fail: err => {
+              console.log("err:",err)
+            }
         });
+        // app.baseGet(app.U({ c: 'coupons_api', a: 'get_issue_coupon_list', q: { limit: 3 } }), function(res) {
+        //     that.setData({ couponList: res.data });
+        //     if (!res.data.length) that.setData({ window: false });
+        // });
     },
     getIndexConfig: function() {
         var that = this;

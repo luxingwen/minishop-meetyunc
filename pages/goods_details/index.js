@@ -413,28 +413,55 @@ Page({
      */
     getCartCount: function(isAnima) {
         var that = this;
-        app.baseGet(app.U({ c: 'auth_api', a: 'get_cart_num' }), function(res) {
-            that.setData({ CartCount: res.data });
-            //加入购物车后重置属性
-            if (isAnima) {
-                that.setData({
-                    animated: true,
-                    attrValue: '',
-                    attr: '请选择',
-                    ["productSelect.image"]: that.data.storeInfo.image,
-                    ["productSelect.price"]: that.data.storeInfo.price,
-                    ["productSelect.stock"]: that.data.storeInfo.stock,
-                    ['productSelect.unique']: '',
-                    ['productSelect.cart_num']: 1,
-                });
-                that.selectComponent('#product-window').ResetAttr();
-                setTimeout(function() {
+        request.getCartNum({
+            success: res => {
+                that.setData({ CartCount: res.data });
+                //加入购物车后重置属性
+                if (isAnima) {
                     that.setData({
-                        animated: false
+                        animated: true,
+                        attrValue: '',
+                        attr: '请选择',
+                        ["productSelect.image"]: that.data.storeInfo.image,
+                        ["productSelect.price"]: that.data.storeInfo.price,
+                        ["productSelect.stock"]: that.data.storeInfo.stock,
+                        ['productSelect.unique']: '',
+                        ['productSelect.cart_num']: 1,
                     });
-                }, 500);
+                    that.selectComponent('#product-window').ResetAttr();
+                    setTimeout(function() {
+                        that.setData({
+                            animated: false
+                        });
+                    }, 500);
+                }
+            },
+            fail: err => {
+                console.log(err);
             }
-        });
+        })
+        // app.baseGet(app.U({ c: 'auth_api', a: 'get_cart_num' }), function(res) {
+        //     that.setData({ CartCount: res.data });
+        //     //加入购物车后重置属性
+        //     if (isAnima) {
+        //         that.setData({
+        //             animated: true,
+        //             attrValue: '',
+        //             attr: '请选择',
+        //             ["productSelect.image"]: that.data.storeInfo.image,
+        //             ["productSelect.price"]: that.data.storeInfo.price,
+        //             ["productSelect.stock"]: that.data.storeInfo.stock,
+        //             ['productSelect.unique']: '',
+        //             ['productSelect.cart_num']: 1,
+        //         });
+        //         that.selectComponent('#product-window').ResetAttr();
+        //         setTimeout(function() {
+        //             that.setData({
+        //                 animated: false
+        //             });
+        //         }, 500);
+        //     }
+        // });
     },
     /**
      * 立即购买

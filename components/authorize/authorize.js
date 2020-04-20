@@ -37,10 +37,19 @@ Component({
     methods: {
         get_logo_url: function() {
             if (wx.getStorageSync('logo_url')) return this.setData({ logo_url: wx.getStorageSync('logo_url') });
-            app.baseGet(app.U({ c: 'public_api', a: 'get_logo_url' }), function(res) {
+            request.getLogoUrl({
+              success: res => {
                 wx.setStorageSync('logo_url', res.data.logo_url);
                 this.setData({ logo_url: res.data.logo_url });
-            }.bind(this));
+              },
+              fail: err => {
+                console.log(err)
+              }
+            });
+            // app.baseGet(app.U({ c: 'public_api', a: 'get_logo_url' }), function(res) {
+            //     wx.setStorageSync('logo_url', res.data.logo_url);
+            //     this.setData({ logo_url: res.data.logo_url });
+            // }.bind(this));
         },
         //监听登录状态
         WatchIsLogin: function() {
