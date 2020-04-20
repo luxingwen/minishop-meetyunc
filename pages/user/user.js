@@ -31,9 +31,17 @@ Page({
   */
   getMyMenus: function () {
     var that = this;
-    app.baseGet(app.U({ c: 'public_api', a: 'get_my_naviga' }), function (res) {
-      that.setData({MyMenus:res.data.routine_my_menus});
-    });
+    request.getMyNaviga({
+      success: res => {
+        that.setData({MyMenus:res.data.routine_my_menus});
+      },
+      fail: err => {
+        console.log(err)
+      }
+    })
+    // app.baseGet(app.U({ c: 'public_api', a: 'get_my_naviga' }), function (res) {
+    //   that.setData({MyMenus:res.data.routine_my_menus});
+    // });
   },
   /**
    * 小程序设置
@@ -60,7 +68,7 @@ Page({
     var that=this;
     request.userInfo({
       success: res => {
-        console.log("userinfo:",res);
+        // console.log("userinfo:",res);
         that.setData({userInfo:res.data});
       },
       fail: err => {
