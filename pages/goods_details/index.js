@@ -68,9 +68,19 @@ Page({
      */
     getUserInfo: function() {
         var that = this;
-        app.baseGet(app.U({ c: 'user_api', a: 'get_my_user_info' }), function(res) {
-            that.setData({ 'sharePacket.isState': res.data.is_promoter ? false : true, uid: res.data.uid });
-        });
+        request.getMyUserInfo({
+          success: res => {
+            if(res.code == 0){
+              that.setData({ 'sharePacket.isState': res.data.is_promoter ? false : true, uid: res.data.uid });
+            }
+          },
+          fail: err => {
+            console.log(err)
+          }
+        })
+        // app.baseGet(app.U({ c: 'user_api', a: 'get_my_user_info' }), function(res) {
+        //     that.setData({ 'sharePacket.isState': res.data.is_promoter ? false : true, uid: res.data.uid });
+        // });
     },
     /**
      * 购物车数量加和数量减

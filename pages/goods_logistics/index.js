@@ -1,3 +1,4 @@
+import request from '../../utils/api'
 var app = getApp();
 Page({
 
@@ -42,9 +43,21 @@ Page({
 */
   get_host_product: function () {
     var that = this;
-    app.baseGet(app.U({ c: 'public_api', a: "get_hot_product", q: { offset: 1, limit: 4 } }), function (res) {
-      that.setData({ host_product: res.data });
+    request.hotProducts({
+      data: {
+        page: 1,
+        limit: 4
+      },
+      success: res => {
+        that.setData({host_product: res.data.list})
+      },
+      fail: err=> {
+        console.log(err)
+      }
     });
+    // app.baseGet(app.U({ c: 'public_api', a: "get_hot_product", q: { offset: 1, limit: 4 } }), function (res) {
+    //   that.setData({ host_product: res.data });
+    // });
   },
   /**
    * 生命周期函数--监听页面加载

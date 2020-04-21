@@ -69,6 +69,28 @@ function getCartNum(params) {
 	request("/api/store/cart_num", "get", params)
 }
 
+// 获取用户信息
+function getMyUserInfo(params) {
+	request("/api/user/my_user_info", "get", params)
+}
+
+
+// 取消收藏
+function uncollectProduct(id, params) {
+	request("/api/store/uncollect_product/" + id, "delete", params)
+}
+
+
+// 收藏
+function collectProduct(id, params) {
+	request("/api/store/collectProduct/" + id, "post", params)
+}
+
+// 获取用户收藏产品
+function getUserCollectProduct(params) {
+	request("/api/store/user_collect_product", "get", params)
+}
+
 export default { // 暴露接口
   login,
   setCode,
@@ -83,5 +105,10 @@ export default { // 暴露接口
   getProductCollect,
   getIssueCouponList,
   getLogoUrl,
-  getCartNum
+  getCartNum,
+  getMyUserInfo,
+  uncollectProduct,
+  collectProduct,
+  getUserCollectProduct
+
 }
