@@ -1,4 +1,5 @@
 // pages/coupon-list/index.js
+import request from '../../utils/api'
 const app=getApp();
 Page({
 
@@ -35,9 +36,17 @@ Page({
   */
   getUseCoupons:function(){
     var that = this;
-    app.baseGet(app.U({ c: 'coupons_api', a:'get_use_coupons'}),function(res){
-      that.setData({ loading: true, couponsList:res.data});
+    request.getUseCoupons(0, {
+      success: res => {
+        that.setData({ loading: true, couponsList:res.data});
+      },
+      fail: err=> {
+        console.log(err)
+      }
     });
+    // app.baseGet(app.U({ c: 'coupons_api', a:'get_use_coupons'}),function(res){
+    //   that.setData({ loading: true, couponsList:res.data});
+    // });
   },
 
   /**

@@ -87,15 +87,27 @@ Page({
      * 取消收藏
      */
     delCollection: function(e) {
+        console.log("e====>",e);
         var id = e.target.dataset.id,
             that = this,
             index = e.target.dataset.index;
-        app.baseGet(app.U({ c: 'store_api', a: 'get_user_collect_product_del', q: { pid: id } }), function(res) {
-            return app.Tips({ title: '取消收藏成功', icon: 'success' }, function() {
-                that.data.collectProductList.splice(index, 1);
-                that.setData({ collectProductList: that.data.collectProductList });
-            });
+        request.userCollectProductDel(id, {
+            success: res => {
+                return app.Tips({ title: '取消收藏成功', icon: 'success' }, function() {
+                    that.data.collectProductList.splice(index, 1);
+                    that.setData({ collectProductList: that.data.collectProductList });
+                });
+            },
+            fail: err => {
+                console.log(err)
+            }
         });
+        // app.baseGet(app.U({ c: 'store_api', a: 'get_user_collect_product_del', q: { pid: id } }), function(res) {
+        //     return app.Tips({ title: '取消收藏成功', icon: 'success' }, function() {
+        //         that.data.collectProductList.splice(index, 1);
+        //         that.setData({ collectProductList: that.data.collectProductList });
+        //     });
+        // });
     },
     /**
      * 获取我的推荐

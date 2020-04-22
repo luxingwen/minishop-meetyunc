@@ -105,6 +105,28 @@ function getIndexGroomList(typ, params) {
 	request("/api/index_groom_list/" + typ, "get", params)
 }
 
+
+// 取消收藏
+function userCollectProductDel(id, params) {
+	request("/api/store/user_collect_product_del/" +id, "delete", params)
+}
+
+
+// 获取领取优惠券列表
+function getUseCoupons(typ, params) {
+	request("/api/coupon/use_coupons/"+typ, "get", params)
+}
+
+//获取活动是否存在
+function getActivity(params) {
+	request("/api/user/activity", "get", params)
+}
+
+// 用户地址列表
+function userAddressList(params) {
+	request("/api/user/user_address_list", "get", params)
+}
+
 export default { // 暴露接口
   login,
   setCode,
@@ -126,5 +148,9 @@ export default { // 暴露接口
   getUserCollectProduct,
   getBargainList,
   getCombinationList,
-  getIndexGroomList
+  getIndexGroomList,
+  userCollectProductDel,
+  getUseCoupons,
+  getActivity,
+  userAddressList
 }

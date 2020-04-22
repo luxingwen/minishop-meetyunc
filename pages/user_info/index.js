@@ -1,3 +1,4 @@
+import request from '../../utils/api'
 var app = getApp();
 const util = require('../../utils/util.js');
 Page({
@@ -67,9 +68,17 @@ Page({
   */
   getUserInfo:function(){
     var that=this;
-    app.baseGet(app.U({ c: 'user_api', a:'get_my_user_info'}),function(res){
-      that.setData({userInfo:res.data});
-    });
+    request.getMyUserInfo({
+      success: res => {
+         that.setData({userInfo:res.data});
+       },
+       fail: err => {
+        console.log(err)
+       }
+    })
+    // app.baseGet(app.U({ c: 'user_api', a:'get_my_user_info'}),function(res){
+    //   that.setData({userInfo:res.data});
+    // });
   },
 
   /**
