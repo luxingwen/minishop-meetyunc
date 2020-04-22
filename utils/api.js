@@ -80,15 +80,29 @@ function uncollectProduct(id, params) {
 	request("/api/store/uncollect_product/" + id, "delete", params)
 }
 
-
 // 收藏
 function collectProduct(id, params) {
-	request("/api/store/collectProduct/" + id, "post", params)
+	request("/api/store/collect_product/" + id, "post", params)
 }
 
 // 获取用户收藏产品
 function getUserCollectProduct(params) {
 	request("/api/store/user_collect_product", "get", params)
+}
+
+// 获取砍价活动
+function getBargainList(params) {
+	request("/api/bargain/bargain_list", "get", params)
+}
+
+// 拼团列表
+function getCombinationList(params) {
+	request("/api/pink/combination_list", "get", params)
+}
+
+
+function getIndexGroomList(typ, params) {
+	request("/api/index_groom_list/" + typ, "get", params)
 }
 
 export default { // 暴露接口
@@ -109,6 +123,8 @@ export default { // 暴露接口
   getMyUserInfo,
   uncollectProduct,
   collectProduct,
-  getUserCollectProduct
-
+  getUserCollectProduct,
+  getBargainList,
+  getCombinationList,
+  getIndexGroomList
 }

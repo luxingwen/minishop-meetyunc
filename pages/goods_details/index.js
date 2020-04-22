@@ -69,14 +69,14 @@ Page({
     getUserInfo: function() {
         var that = this;
         request.getMyUserInfo({
-          success: res => {
-            if(res.code == 0){
-              that.setData({ 'sharePacket.isState': res.data.is_promoter ? false : true, uid: res.data.uid });
+            success: res => {
+                if (res.code == 0) {
+                    that.setData({ 'sharePacket.isState': res.data.is_promoter ? false : true, uid: res.data.uid });
+                }
+            },
+            fail: err => {
+                console.log(err)
             }
-          },
-          fail: err => {
-            console.log(err)
-          }
         })
         // app.baseGet(app.U({ c: 'user_api', a: 'get_my_user_info' }), function(res) {
         //     that.setData({ 'sharePacket.isState': res.data.is_promoter ? false : true, uid: res.data.uid });
@@ -329,17 +329,40 @@ Page({
                 iShidden: false,
             });
         } else {
-            var url = app.U({
-                    c: 'store_api',
-                    a: this.data.storeInfo.userCollect ? 'uncollect_product' : 'collect_product',
-                    q: { productId: this.data.storeInfo.id }
-                }),
-                that = this;
-            app.baseGet(url, function(res) {
-                that.setData({
-                    ['storeInfo.userCollect']: !that.data.storeInfo.userCollect
+            if (this.data.storeInfo.userCollect) {
+                request.uncollectProduct(this.data.storeInfo.id, {
+                    success: res => {
+                        that.setData({
+                            ['storeInfo.userCollect']: !that.data.storeInfo.userCollect
+                        })
+                    },
+                    fail: err => {
+                        console.log(err)
+                    }
                 })
-            });
+            } else {
+                request.collectProduct(this.data.storeInfo.id, {
+                    success: res => {
+                        that.setData({
+                            ['storeInfo.userCollect']: !that.data.storeInfo.userCollect
+                        })
+                    },
+                    fail: err => {
+                        console.log(err)
+                    }
+                })
+            }
+            // var url = app.U({
+            //         c: 'store_api',
+            //         a: this.data.storeInfo.userCollect ? 'uncollect_product' : 'collect_product',
+            //         q: { productId: this.data.storeInfo.id }
+            //     }),
+            //     that = this;
+            // app.baseGet(url, function(res) {
+            //     that.setData({
+            //         ['storeInfo.userCollect']: !that.data.storeInfo.userCollect
+            //     })
+            // });
         }
     },
     /**
