@@ -66,7 +66,7 @@ function getLogoUrl(params) {
 
 // 获取购物车数量
 function getCartNum(params) {
-	request("/api/store/cart_num", "get", params)
+	request("/api/auth/cart_num", "get", params)
 }
 
 // 获取用户信息
@@ -127,6 +127,66 @@ function userAddressList(params) {
 	request("/api/user/user_address_list", "get", params)
 }
 
+// 编辑用户地址
+function editUserAddress(params) {
+	request("/api/user/edit_user_address", "post", params)
+}
+
+// 	设置默认地址
+function setUserDefaultAddress(id, params) {
+	request("/api/user/set_user_default_address/"+id, "put", params)
+}
+
+// 删除地址
+function removeUserAddress(id, params) {
+	request("/api/user/remove_user_address/"+id, "delete", params)
+}
+
+// 获取用户地址
+function getUserAddress(id, params) {
+	request("/api/user/user_address/" + id, "get", params)
+}
+
+// 领取优惠券
+function userGetCoupon(id, params) {
+	request("/api/coupon/user_get_coupon/" + id, "post", params)
+}
+
+// 批量收藏
+function collectProductAll(params) {
+	request("/api/store/collect_product_all", "post", params)
+}
+
+// 移除购物车
+function removeCart(params) {
+	request("/api/auth/remove_cart", "post", params)
+}
+
+// 购物车列表
+function cartList(params) {
+	request("/api/auth/cart_list", "get", params)
+}
+
+// 获取购物车数量
+function cartNum(params) {
+	request("/api/auth/cart_num", "get", params)
+}
+
+// 修改购物车数量
+function changeCartNum(params) {
+	request("/api/auth/change_user_cart_num", "put", params)
+}
+
+// 设置购物车
+function setCart(params) {
+	request("/api/auth/set_cart", "post", params)
+}
+
+// 设置购物车
+function nowBuy(params) {
+	request("/api/auth/now_buy", "post", params)
+}
+
 export default { // 暴露接口
   login,
   setCode,
@@ -152,5 +212,17 @@ export default { // 暴露接口
   userCollectProductDel,
   getUseCoupons,
   getActivity,
-  userAddressList
+  userAddressList,
+  editUserAddress,
+  setUserDefaultAddress,
+  removeUserAddress,
+  getUserAddress,
+  userGetCoupon,
+  collectProductAll,
+  removeCart,
+  cartList,
+  cartNum,
+  changeCartNum,
+  setCart,
+  nowBuy
 }

@@ -53,19 +53,38 @@ Page({
                         addressP.province = res.provinceName;
                         addressP.city = res.cityName;
                         addressP.district = res.countyName;
-                        app.basePost(app.U({ c: 'user_api', a: "edit_user_address" }), {
-                            address: addressP,
-                            is_default: 1,
-                            real_name: res.userName,
-                            post_code: res.postalCode,
-                            phone: res.telNumber,
-                            detail: res.detailInfo,
-                            id: 0
-                        }, function(res) {
-                            app.Tips({ title: "添加成功", icon: 'success' }, function() {
-                                that.getAddressList(true);
-                            });
+                        request.editUserAddress({
+                            data: {
+                                address: addressP,
+                                is_default: 1,
+                                real_name: res.userName,
+                                post_code: res.postalCode,
+                                phone: res.telNumber,
+                                detail: res.detailInfo,
+                                id: 0
+                            },
+                            success: res => {
+                                app.Tips({ title: "添加成功", icon: 'success' }, function() {
+                                    that.getAddressList(true);
+                                });
+                            },
+                            fail: err => {
+                                console.log(err)
+                            }
                         });
+                        // app.basePost(app.U({ c: 'user_api', a: "edit_user_address" }), {
+                        //     address: addressP,
+                        //     is_default: 1,
+                        //     real_name: res.userName,
+                        //     post_code: res.postalCode,
+                        //     phone: res.telNumber,
+                        //     detail: res.detailInfo,
+                        //     id: 0
+                        // }, function(res) {
+                        //     app.Tips({ title: "添加成功", icon: 'success' }, function() {
+                        //         that.getAddressList(true);
+                        //     });
+                        // });
                     },
                     fail: function(res) {
                         if (res.errMsg == 'chooseAddress:cancel') return app.Tips({ title: '取消选择' });
@@ -105,8 +124,8 @@ Page({
                 });
             },
             fail: err => {
-              console.log(err);
-              that.setData({ loading: false, loadTitle: '加载更多' });
+                console.log(err);
+                that.setData({ loading: false, loadTitle: '加载更多' });
             }
         });
         // app.baseGet(app.U({ c: 'user_api', a:'user_address_list',q:{page:that.data.page,limit:that.data.limit}}),function(res){
@@ -132,15 +151,29 @@ Page({
             that = this;;
         var address = this.data.addressList[index];
         if (address == undefined) return app.Tips({ title: '您设置的默认地址不存在!' });
-        app.baseGet(app.U({ c: 'user_api', a: 'set_user_default_address', q: { addressId: address.id } }), function(res) {
-            for (var i = 0, len = that.data.addressList.length; i < len; i++) {
-                if (i == index) that.data.addressList[i].is_default = true;
-                else that.data.addressList[i].is_default = false;
+        request.setUserDefaultAddress(address.id, {
+            success: res => {
+                for (var i = 0, len = that.data.addressList.length; i < len; i++) {
+                    if (i == index) that.data.addressList[i].is_default = true;
+                    else that.data.addressList[i].is_default = false;
+                }
+                app.Tips({ title: '设置成功', icon: 'success' }, function() {
+                    that.setData({ addressList: that.data.addressList });
+                });
+            },
+            fail: err => {
+                console.log(err)
             }
-            app.Tips({ title: '设置成功', icon: 'success' }, function() {
-                that.setData({ addressList: that.data.addressList });
-            });
-        });
+        })
+        // app.baseGet(app.U({ c: 'user_api', a: 'set_user_default_address', q: { addressId: address.id } }), function(res) {
+        //     for (var i = 0, len = that.data.addressList.length; i < len; i++) {
+        //         if (i == index) that.data.addressList[i].is_default = true;
+        //         else that.data.addressList[i].is_default = false;
+        //     }
+        //     app.Tips({ title: '设置成功', icon: 'success' }, function() {
+        //         that.setData({ addressList: that.data.addressList });
+        //     });
+        // });
     },
     /**
      * 编辑地址
@@ -162,12 +195,23 @@ Page({
             that = this,
             address = this.data.addressList[index];
         if (address == undefined) return app.Tips({ title: '您删除的地址不存在!' });
-        app.baseGet(app.U({ c: 'user_api', a: 'remove_user_address', q: { addressId: address.id } }), function(res) {
-            app.Tips({ title: '删除成功', icon: 'success' }, function() {
-                that.data.addressList.splice(index, 1);
-                that.setData({ addressList: that.data.addressList });
-            });
+        request.removeUserAddress(address.id, {
+            success: res => {
+                app.Tips({ title: '删除成功', icon: 'success' }, function() {
+                    that.data.addressList.splice(index, 1);
+                    that.setData({ addressList: that.data.addressList });
+                });
+            },
+            fail: err => {
+                console.log(err)
+            }
         })
+        // app.baseGet(app.U({ c: 'user_api', a: 'remove_user_address', q: { addressId: address.id } }), function(res) {
+        //     app.Tips({ title: '删除成功', icon: 'success' }, function() {
+        //         that.data.addressList.splice(index, 1);
+        //         that.setData({ addressList: that.data.addressList });
+        //     });
+        // })
     },
     /**
      * 新增地址

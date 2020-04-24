@@ -422,23 +422,54 @@ Page({
         if (this.data.attribute.cartAttr === true && this.data.isOpen == false) return this.setData({ isOpen: true });
         //如果有属性,没有选择,提示用户选择
         if (this.data.productAttr.length && productSelect === undefined && this.data.isOpen == true) return app.Tips({ title: '请选择属性' });
-        app.baseGet(app.U({
-            c: 'auth_api',
-            a: isPay == undefined ? 'set_cart' : 'now_buy',
-            q: {
-                productId: that.data.id,
-                cartNum: that.data.cart_num,
-                uniqueId: productSelect !== undefined ? productSelect.unique : ''
-            }
-        }), function(res) {
-            that.setData({ isOpen: false, 'attribute.cartAttr': false });
-            if (isPay)
-                wx.navigateTo({ url: '/pages/order_confirm/index?cartId=' + res.data.cartId });
-            else
-                app.Tips({ title: '添加购物车成功', icon: 'success' }, function() {
-                    that.getCartCount(true);
-                });
-        })
+        var data = {
+            productId: parseInt(that.data.id),
+            cartNum: that.data.cart_num,
+            uniqueId: productSelect !== undefined ? productSelect.unique : ''
+        };
+        if (isPay == undefined) {
+            request.setCart({
+                data: data,
+                success: res => {
+                    that.setData({ isOpen: false, 'attribute.cartAttr': false });
+                    app.Tips({ title: '添加购物车成功', icon: 'success' }, function() {
+                        that.getCartCount(true);
+                    });
+                },
+                fail: err => {
+                    console.log(err)
+                }
+            });
+        } else {
+            request.nowBuy({
+                data: data,
+                success: res => {
+                    that.setData({ isOpen: false, 'attribute.cartAttr': false });
+                    wx.navigateTo({ url: '/pages/order_confirm/index?cartId=' + res.data.cartId });
+                },
+                fail: err => {
+                    console.log(err)
+                }
+            });
+        }
+
+        // app.baseGet(app.U({
+        //     c: 'auth_api',
+        //     a: isPay == undefined ? 'set_cart' : 'now_buy',
+        //     q: {
+        //         productId: that.data.id,
+        //         cartNum: that.data.cart_num,
+        //         uniqueId: productSelect !== undefined ? productSelect.unique : ''
+        //     }
+        // }), function(res) {
+        //     that.setData({ isOpen: false, 'attribute.cartAttr': false });
+        //     if (isPay)
+        //         wx.navigateTo({ url: '/pages/order_confirm/index?cartId=' + res.data.cartId });
+        //     else
+        //         app.Tips({ title: '添加购物车成功', icon: 'success' }, function() {
+        //             that.getCartCount(true);
+        //         });
+        // })
     },
     /**
      * 获取购物车数量

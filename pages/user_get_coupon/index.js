@@ -32,15 +32,31 @@ Page({
         var index = e.currentTarget.dataset.index;
         var list = that.data.couponsList;
         //领取优惠券
-        app.basePost(app.U({ c: 'coupons_api', a: 'user_get_coupon' }), { couponId: id }, function(res) {
-            list[index].is_use = true;
-            that.setData({
-                couponsList: list
-            });
-            app.Tips({ title: '领取成功' });
-        }, function(res) {
-            return app.Tips({ title: res.msg });
-        });
+        request.userGetCoupon(id, {
+            success: res => {
+                if (res.code == 0) {
+                    list[index].is_use = true;
+                    that.setData({
+                        couponsList: list
+                    });
+                    app.Tips({ title: '领取成功' });
+                } else {
+                    return app.Tips({ title: res.message });
+                }
+            },
+            fail: err => {
+                console.log(err)
+            }
+        })
+        // app.basePost(app.U({ c: 'coupons_api', a: 'user_get_coupon' }), { couponId: id }, function(res) {
+        //     list[index].is_use = true;
+        //     that.setData({
+        //         couponsList: list
+        //     });
+        //     app.Tips({ title: '领取成功' });
+        // }, function(res) {
+        //     return app.Tips({ title: res.msg });
+        // });
     },
     /**
      * 生命周期函数--监听页面加载

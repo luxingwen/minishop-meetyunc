@@ -18,10 +18,10 @@
            <navigator url='/pages/goods_details/index?id={{item.product_id}}' hover-class='none' class='picTxt acea-row row-between-wrapper'>
               <view class='pictrue'>
                 <image wx:if="{{item.productInfo.attrInfo}}" src='{{item.productInfo.attrInfo.image}}'></image>
-                <image wx:else src='{{item.productInfo.image}}'></image>
+                <image wx:else src='{{item.productInfo.storeInfo.image}}'></image>
               </view>
               <view class='text'>
-                  <view class='line1'>{{item.productInfo.store_name}}</view>
+                  <view class='line1'>{{item.productInfo.storeInfo.store_name}}</view>
                   <view class='infor line1' wx:if="{{item.productInfo.attrInfo}}">属性：{{item.productInfo.attrInfo.suk}}</view>
                   <view class='money'>￥{{item.truePrice}}</view>
               </view>
@@ -49,7 +49,7 @@
                 <image wx:else src='{{item.productInfo.image}}'></image>
             </view>
             <view class='text acea-row row-column-between'>
-                <view class='line1'>{{item.productInfo.store_name}}</view>
+                <view class='line1'>{{item.productInfo.storeInfo.store_name}}</view>
                 <view class='infor line1' wx:if="{{item.productInfo.attrInfo}}">属性：{{item.productInfo.attrInfo.suk}}</view>
                 <view class='acea-row row-between-wrapper'>
                   <view>￥{{item.truePrice}}</view>
